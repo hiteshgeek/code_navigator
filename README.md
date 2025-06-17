@@ -1,6 +1,6 @@
-# Code Navigator
+# Code Navigator (code-navigator-hiteshgeek)
 
-Code Navigator is a Visual Studio Code extension that lets you quickly jump to the next or previous code block (function, class, struct, trait, interface, etc.) in any programming language using keyboard shortcuts.
+Code Navigator (code-navigator-hiteshgeek) is a Visual Studio Code extension that lets you quickly jump to the next or previous code block (function, class, struct, trait, interface, etc.) in any programming language using keyboard shortcuts.
 
 ## Features
 

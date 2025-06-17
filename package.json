@@ -1,6 +1,6 @@
 {
-  "name": "code-navigator",
-  "displayName": "Code Navigator",
+  "name": "code-navigator-hiteshgeek",
+  "displayName": "Code Navigator (hiteshgeek)",
   "description": "Navigate to next/previous code block (function, class, trait, interface, etc.) using keyboard shortcuts.",
   "version": "0.0.1",
   "engines": {
@@ -78,10 +78,20 @@
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.5.2"
   },
+  "publisher": "hiteshgeek",
+  "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/hiteshgeek/code_navigator.git"
+    "url": "https://github.com/hiteshgeek/code_navigator"
   },
+  "author": {
+    "name": "Hitesh Vaghela",
+    "email": "hbvaghela83@email.com"
+  },
+  "bugs": {
+    "url": "https://github.com/hiteshgeek/code_navigator/issues"
+  },
+  "homepage": "https://github.com/hiteshgeek/code_navigator",
   "icon": "images/icon.png",
   "galleryBanner": {
     "color": "#007acc",
