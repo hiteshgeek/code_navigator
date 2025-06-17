@@ -1,6 +1,9 @@
-# Code Navigator
+# Code Navigator (code-navigator-hiteshgeek)
 
-Code Navigator is a Visual Studio Code extension that lets you quickly jump to the next or previous code block (function, class, struct, trait, interface, etc.) in any programming language using keyboard shortcuts.
+[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/hiteshgeek.code-navigator-hiteshgeek?label=VS%20Code%20Marketplace)](https://marketplace.visualstudio.com/items?itemName=hiteshgeek.code-navigator-hiteshgeek)
+[![GitHub](https://img.shields.io/github/stars/hiteshgeek/code_navigator?style=social)](https://github.com/hiteshgeek/code_navigator)
+
+Code Navigator (code-navigator-hiteshgeek) is a Visual Studio Code extension that lets you quickly jump to the next or previous code block (function, class, struct, trait, interface, etc.) in any programming language using keyboard shortcuts.
 
 ## Features
 
@@ -46,10 +49,16 @@ Code Navigator uses a smart pattern-matching algorithm to detect block starts (s
 - Detection is based on regular expressions and may not handle all edge cases or deeply nested/anonymous blocks.
 - For best results, use with conventional code formatting.
 
-## Contributing
+## Links
 
-Pull requests and suggestions are welcome! Please open an issue or PR on [GitHub](https://github.com/hiteshgeek/code_navigator).
+- [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=hiteshgeek.code-navigator-hiteshgeek)
+- [GitHub Repository](https://github.com/hiteshgeek/code_navigator)
+- [Report Issues](https://github.com/hiteshgeek/code_navigator/issues)
 
 ## License
 
 MIT
+
+## Author
+
+- Hitesh Vaghela ([hiteshgeek](https://github.com/hiteshgeek))
