@@ -27,8 +27,9 @@ try {
 $functions = [];
 $classMethods = [];
 $classes = [];
+$controlFlowBlocks = [];
 
-function collectFunctions($nodes, &$functions, &$classMethods, &$classes, $parentClass = null)
+function collectFunctions($nodes, &$functions, &$classMethods, &$classes, &$controlFlowBlocks, $parentClass = null)
 {
     foreach ($nodes as $node) {
         if ($node instanceof Node\Stmt\Function_) {
@@ -47,7 +48,7 @@ function collectFunctions($nodes, &$functions, &$classMethods, &$classes, $paren
             ];
             // Only recurse into stmts for nested functions
             if (isset($node->stmts)) {
-                collectFunctions($node->stmts, $functions, $classMethods, $classes);
+                collectFunctions($node->stmts, $functions, $classMethods, $classes, $controlFlowBlocks);
             }
             continue;
         } elseif ($node instanceof Node\Stmt\Class_ || $node instanceof Node\Stmt\Trait_ || $node instanceof Node\Stmt\Interface_) {
@@ -76,20 +77,58 @@ function collectFunctions($nodes, &$functions, &$classMethods, &$classes, $paren
                     ];
                     // Only recurse into stmts for nested functions in methods
                     if (isset($stmt->stmts)) {
-                        collectFunctions($stmt->stmts, $functions, $classMethods, $classes);
+                        collectFunctions($stmt->stmts, $functions, $classMethods, $classes, $controlFlowBlocks);
                     }
                 }
             }
             continue;
+        } elseif ($node instanceof Node\Stmt\If_) {
+            $controlFlowBlocks[] = [
+                'type' => 'if',
+                'name' => 'if',
+                'startLine' => $node->getStartLine(),
+                'endLine' => $node->getEndLine()
+            ];
+            foreach ($node->elseifs as $elseif) {
+                $controlFlowBlocks[] = [
+                    'type' => 'elseif',
+                    'name' => 'else if',
+                    'startLine' => $elseif->getStartLine(),
+                    'endLine' => $elseif->getEndLine()
+                ];
+            }
+            if ($node->else) {
+                $controlFlowBlocks[] = [
+                    'type' => 'else',
+                    'name' => 'else',
+                    'startLine' => $node->else->getStartLine(),
+                    'endLine' => $node->else->getEndLine()
+                ];
+            }
+        } elseif ($node instanceof Node\Stmt\Switch_) {
+            $controlFlowBlocks[] = [
+                'type' => 'switch',
+                'name' => 'switch',
+                'startLine' => $node->getStartLine(),
+                'endLine' => $node->getEndLine()
+            ];
+            foreach ($node->cases as $case) {
+                $controlFlowBlocks[] = [
+                    'type' => 'case',
+                    'name' => 'case',
+                    'startLine' => $case->getStartLine(),
+                    'endLine' => $case->getEndLine()
+                ];
+            }
         }
         // Do not recurse into all subnodes for function/method nodes to avoid duplicates
         if (!($node instanceof Node\Stmt\Function_) && !($node instanceof Node\Stmt\ClassMethod)) {
             foreach ($node->getSubNodeNames() as $subNodeName) {
                 $subNode = $node->$subNodeName;
                 if (is_array($subNode)) {
-                    collectFunctions($subNode, $functions, $classMethods, $classes, $parentClass);
+                    collectFunctions($subNode, $functions, $classMethods, $classes, $controlFlowBlocks, $parentClass);
                 } elseif ($subNode instanceof Node) {
-                    collectFunctions([$subNode], $functions, $classMethods, $classes, $parentClass);
+                    collectFunctions([$subNode], $functions, $classMethods, $classes, $controlFlowBlocks, $parentClass);
                 }
             }
         }
@@ -115,11 +154,12 @@ function typeNodeToString($typeNode)
     return null;
 }
 
-collectFunctions($ast, $functions, $classMethods, $classes);
+collectFunctions($ast, $functions, $classMethods, $classes, $controlFlowBlocks);
 
 $output = [
     'functions' => $functions,
     'classMethods' => $classMethods,
-    'classes' => $classes
+    'classes' => $classes,
+    'controlFlowBlocks' => $controlFlowBlocks
 ];
 echo json_encode($output, JSON_PRETTY_PRINT);

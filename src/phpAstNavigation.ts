@@ -15,24 +15,37 @@ export async function navigateToBlock(
   const enableEnumBlocks = config.get<boolean>("enableEnumBlocks");
   const enableNamespaceBlocks = config.get<boolean>("enableNamespaceBlocks");
   const enableRegionBlocks = config.get<boolean>("enableRegionBlocks");
+  const enableControlFlowBlocks = config.get<boolean>(
+    "enableControlFlowBlocks"
+  );
   // ...add more as needed for your block types
 
   let flatBlockSymbols: any[] = [];
   if (doc.languageId === "php") {
     // Use AST for PHP
     const ast = await getPhpAst(doc.fileName);
-    // Combine functions, classMethods, and classes/traits/interfaces for navigation
-    const blocks = [
+    // Combine all block types for navigation
+    let blocks = [
       ...(ast.functions || []),
       ...(ast.classMethods || []),
       ...(ast.classes || []),
     ];
+    if (enableControlFlowBlocks && ast.controlFlowBlocks) {
+      blocks = blocks.concat(ast.controlFlowBlocks);
+    }
     flatBlockSymbols = blocks
       .filter((b) => {
-        if (b.type === "interface" && !enableNamespaceBlocks) return false;
-        if (b.type === "trait" && !enableRegionBlocks) return false;
         if (b.type === "enum" && !enableEnumBlocks) return false;
-        // Always include class, method, function
+        if (
+          (b.type === "if" ||
+            b.type === "elseif" ||
+            b.type === "else" ||
+            b.type === "switch" ||
+            b.type === "case") &&
+          !enableControlFlowBlocks
+        )
+          return false;
+        // Always include class, method, function, interface, trait
         return true;
       })
       .map((b) => ({
@@ -46,6 +59,12 @@ export async function navigateToBlock(
             ? vscode.SymbolKind.Interface
             : b.type === "enum"
             ? vscode.SymbolKind.Enum
+            : b.type === "if" ||
+              b.type === "elseif" ||
+              b.type === "else" ||
+              b.type === "switch" ||
+              b.type === "case"
+            ? vscode.SymbolKind.Event // Use Event for control flow blocks (or pick another unused kind)
             : vscode.SymbolKind.Method,
         range: new vscode.Range(b.startLine - 1, 0, b.endLine - 1, 0),
         selectionRange: new vscode.Range(
