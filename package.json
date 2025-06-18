@@ -2,7 +2,7 @@
   "name": "code-navigator-hiteshgeek",
   "displayName": "Code Navigator (hiteshgeek)",
   "description": "Navigate to next/previous code block (function, class, trait, interface, etc.) using keyboard shortcuts.",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "engines": {
     "vscode": "^1.101.0"
   },
