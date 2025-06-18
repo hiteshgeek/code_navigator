@@ -16,12 +16,12 @@ Code Navigator (code-navigator-hiteshgeek) is a Visual Studio Code extension tha
 
 ## Default Keybindings
 
-| Action                     | Shortcut (Windows/Linux) |
-| -------------------------- | ------------------------ |
-| Go to Next Block Start     | Ctrl+Alt+Down            |
-| Go to Previous Block Start | Ctrl+Alt+Up              |
-| Go to Next Block End       | Ctrl+Alt+PageDown        |
-| Go to Previous Block End   | Ctrl+Alt+PageUp          |
+| Action                     | Shortcut (Windows/Linux) | Shortcut (macOS)  |
+| -------------------------- | ------------------------ | ----------------- |
+| Go to Next Block Start     | Ctrl+Win+Down            | Ctrl+Cmd+Down     |
+| Go to Previous Block Start | Ctrl+Win+Up              | Ctrl+Cmd+Up       |
+| Go to Next Block End       | Ctrl+Win+PageDown        | Ctrl+Cmd+PageDown |
+| Go to Previous Block End   | Ctrl+Win+PageUp          | Ctrl+Cmd+PageUp   |
 
 > You can change these keybindings in your VS Code Keyboard Shortcuts settings.
 
