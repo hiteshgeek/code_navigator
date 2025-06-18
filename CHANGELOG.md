@@ -2,8 +2,13 @@
 
 All notable changes to the "code-navigator" extension will be documented in this file.
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+## [0.0.2] - 2025-06-18
 
-## [Unreleased]
+- Full PHP AST-based navigation: supports classes, interfaces, traits, methods, functions, and control flow blocks (if, else if, else, switch, case) when enabled in settings.
+- User settings now respected for block types (enum, control flow, etc.).
+- Interface and trait navigation always enabled for PHP.
+- Improved packaging automation for PHP dependencies.
+
+## [0.0.1] - 2025-06-17
 
 - Initial release
