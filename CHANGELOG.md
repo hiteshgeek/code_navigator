@@ -5,11 +5,15 @@ All notable changes to the "code-navigator" extension will be documented in this
 ## [0.0.4] - 2025-06-19
 
 - **Key Feature: End Block Annotation!**
+
   - When you navigate to the end of any code block, a temporary inline annotation appears at the end line, showing:
 
-    `//end of line_number : content of first line`
+    `//<line_number> : <content of first line>`
+
+    (Note: The prefix `end of` has been removed for a cleaner look.)
 
     This annotation remains visible as long as your cursor is at the end of the block, making it easy to identify the block's start and scope at a glance. This works for all supported languages and is implemented as a reusable component for future extensibility.
+
 - Refactored navigation logic for better multi-language support and maintainability.
 
 ## [0.0.3] - 2025-06-18

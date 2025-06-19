@@ -95,13 +95,10 @@ export async function navigateToJsBlock(
 
     // Show end block decoration if navigating to end
     if (position === "end") {
-      // Get the content of the start line of the block
-      const startLineNum =
-        targetSym.range?.start?.line ??
-        targetSym.selectionRange?.start?.line ??
-        0;
-      const startLineText = doc.lineAt(startLineNum).text.trim();
-      showEndBlockDecoration(editor, doc, newLine, startLineNum, startLineText);
+      // Use VS Code command to trigger global update
+      await vscode.commands.executeCommand(
+        "code-navigator.updateEndBlockDecoration"
+      );
     }
     return;
   }
