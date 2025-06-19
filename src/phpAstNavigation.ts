@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { getPhpAst } from "./phpAstBridge";
 import { navigateToJsBlock } from "./jsSymbolNavigation";
+import { showEndBlockDecoration } from "./endBlockDecoration";
 
 export async function navigateToBlock(
   direction: "next" | "previous",
@@ -168,6 +169,17 @@ export async function navigateToBlock(
       new vscode.Range(newPos, newPos),
       vscode.TextEditorRevealType.InCenter
     );
+
+    // Show end block decoration if navigating to end
+    if (position === "end") {
+      // Get the content of the start line of the block
+      const startLineNum =
+        targetSym.range?.start?.line ??
+        targetSym.selectionRange?.start?.line ??
+        0;
+      const startLineText = doc.lineAt(startLineNum).text.trim();
+      showEndBlockDecoration(editor, doc, newLine, startLineNum, startLineText);
+    }
     return;
   }
   vscode.window.showInformationMessage(

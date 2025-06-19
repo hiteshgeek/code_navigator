@@ -5,6 +5,14 @@
 
 Code Navigator (code-navigator-hiteshgeek) is a Visual Studio Code extension that lets you quickly jump to the next or previous code block (function, class, struct, trait, interface, control flow, etc.) in any programming language using keyboard shortcuts.
 
+## ✨ Key Feature: End Block Annotation
+
+- **See exactly which block you navigated to!** When you jump to the end of any code block, a temporary inline annotation appears at the end line, showing:
+
+  `//end of line_number : content of first line`
+
+  This annotation stays visible as long as your cursor is at the end of the block, making it easy to identify the block's start and scope at a glance. Works for all supported languages!
+
 ## Highlights
 
 - **Full PHP AST-based navigation**: Accurate navigation for PHP classes, interfaces, traits, methods, functions, and control flow blocks (if, else if, else, switch, case) using `nikic/php-parser`.
@@ -30,6 +38,7 @@ Code Navigator (code-navigator-hiteshgeek) is a Visual Studio Code extension tha
 1. Open any code file in a supported language.
 2. Place your cursor anywhere in the file.
 3. Use the shortcuts to jump between code blocks.
+4. When you land at the end of a block, look for the inline annotation to see which block you are at!
 
 ## Supported Languages
 
@@ -47,6 +56,7 @@ Code Navigator (code-navigator-hiteshgeek) is a Visual Studio Code extension tha
 - For PHP, uses a robust AST parser (`nikic/php-parser`) for perfect block detection, including control flow and all OOP constructs.
 - For other languages, uses the VS Code Symbol Provider API for fast, language-aware navigation.
 - User settings control which block types are navigable.
+- **End block annotation** is implemented as a reusable component and works for all supported languages.
 
 ## Links
 
