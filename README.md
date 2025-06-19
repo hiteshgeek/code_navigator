@@ -48,11 +48,6 @@ Code Navigator (code-navigator-hiteshgeek) is a Visual Studio Code extension tha
 - For other languages, uses the VS Code Symbol Provider API for fast, language-aware navigation.
 - User settings control which block types are navigable.
 
-## Limitations
-
-- For non-PHP languages, detection is based on the Symbol Provider API and may not handle all edge cases or deeply nested/anonymous blocks.
-- For best results, use with conventional code formatting.
-
 ## Links
 
 - [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=hiteshgeek.code-navigator-hiteshgeek)
