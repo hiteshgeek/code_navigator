@@ -2,14 +2,18 @@
   "name": "code-navigator-hiteshgeek",
   "displayName": "Code Navigator (hiteshgeek)",
   "description": "Navigate to next/previous code block (function, class, trait, interface, etc.) using keyboard shortcuts.",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "engines": {
     "vscode": "^1.101.0"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onLanguage:php",
+    "onLanguage:javascript",
+    "onLanguage:typescript"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [

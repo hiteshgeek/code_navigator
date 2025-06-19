@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { showEndBlockDecoration } from "./endBlockDecoration";
 
 export async function navigateToJsBlock(
   direction: "next" | "previous",
@@ -91,6 +92,14 @@ export async function navigateToJsBlock(
       new vscode.Range(newPos, newPos),
       vscode.TextEditorRevealType.InCenter
     );
+
+    // Show end block decoration if navigating to end
+    if (position === "end") {
+      // Use VS Code command to trigger global update
+      await vscode.commands.executeCommand(
+        "code-navigator.updateEndBlockDecoration"
+      );
+    }
     return;
   }
   vscode.window.showInformationMessage(

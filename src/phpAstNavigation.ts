@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { getPhpAst } from "./phpAstBridge";
 import { navigateToJsBlock } from "./jsSymbolNavigation";
+import { showEndBlockDecoration } from "./endBlockDecoration";
 
 export async function navigateToBlock(
   direction: "next" | "previous",
@@ -168,6 +169,14 @@ export async function navigateToBlock(
       new vscode.Range(newPos, newPos),
       vscode.TextEditorRevealType.InCenter
     );
+
+    // After navigation, show end block decoration if at end
+    if (position === "end") {
+      // Use VS Code command to trigger global update
+      await vscode.commands.executeCommand(
+        "code-navigator.updateEndBlockDecoration"
+      );
+    }
     return;
   }
   vscode.window.showInformationMessage(
