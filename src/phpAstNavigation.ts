@@ -1,5 +1,6 @@
 import * as vscode from "vscode";
 import { getPhpAst } from "./phpAstBridge";
+import { navigateToJsBlock } from "./jsSymbolNavigation";
 
 export async function navigateToBlock(
   direction: "next" | "previous",
@@ -76,6 +77,9 @@ export async function navigateToBlock(
         children: [],
         detail: b.type,
       }));
+  } else if (["javascript", "typescript"].includes(doc.languageId)) {
+    await navigateToJsBlock(direction, position);
+    return;
   } else {
     // Use Symbol Provider for other languages
     const allSymbols =
@@ -100,6 +104,7 @@ export async function navigateToBlock(
       vscode.SymbolKind.Enum,
       vscode.SymbolKind.Module,
       vscode.SymbolKind.Namespace,
+      vscode.SymbolKind.Variable, // <-- Added Variable
     ];
     flatBlockSymbols = flatten(allSymbols).filter((sym) => {
       if (sym.kind === vscode.SymbolKind.Enum && !enableEnumBlocks)
@@ -108,7 +113,20 @@ export async function navigateToBlock(
         return false;
       if (sym.kind === vscode.SymbolKind.Struct && !enableRegionBlocks)
         return false;
-      // Always include function, method, class
+      // For variables, only include if likely a function/arrow function
+      if (sym.kind === vscode.SymbolKind.Variable) {
+        // Heuristic: name or detail contains 'function' or '=>' or 'ƒ' (shown in some themes)
+        const isFuncLike =
+          (sym.detail && /function|=>|ƒ/.test(sym.detail)) ||
+          /function|arrow|=>|ƒ/.test(sym.name);
+        // Additional heuristic: if the variable's range spans more than 1 line, check the document text for 'function' keyword
+        if (!isFuncLike && sym.range.end.line > sym.range.start.line) {
+          const text = doc.getText(sym.range);
+          if (/function\s*\(/.test(text)) return true;
+        }
+        return isFuncLike;
+      }
+      // Always include function, method, class, etc.
       return eligibleKinds.includes(sym.kind);
     });
   }
@@ -146,7 +164,10 @@ export async function navigateToBlock(
       position === "start" ? 0 : doc.lineAt(newLine).text.length
     );
     editor.selection = new vscode.Selection(newPos, newPos);
-    editor.revealRange(new vscode.Range(newPos, newPos));
+    editor.revealRange(
+      new vscode.Range(newPos, newPos),
+      vscode.TextEditorRevealType.InCenter
+    );
     return;
   }
   vscode.window.showInformationMessage(

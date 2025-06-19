@@ -2,7 +2,7 @@
   "name": "code-navigator-hiteshgeek",
   "displayName": "Code Navigator (hiteshgeek)",
   "description": "Navigate to next/previous code block (function, class, trait, interface, etc.) using keyboard shortcuts.",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "engines": {
     "vscode": "^1.101.0"
   },
@@ -33,22 +33,42 @@
     "keybindings": [
       {
         "command": "code-navigator.gotoNextBlockStart",
-        "key": "ctrl+alt+down",
+        "key": "ctrl+win+down",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "code-navigator.gotoNextBlockStart",
+        "key": "ctrl+meta+down",
         "when": "editorTextFocus"
       },
       {
         "command": "code-navigator.gotoPreviousBlockStart",
-        "key": "ctrl+alt+up",
+        "key": "ctrl+win+up",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "code-navigator.gotoPreviousBlockStart",
+        "key": "ctrl+meta+up",
         "when": "editorTextFocus"
       },
       {
         "command": "code-navigator.gotoNextBlockEnd",
-        "key": "ctrl+alt+pagedown",
+        "key": "ctrl+win+pagedown",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "code-navigator.gotoNextBlockEnd",
+        "key": "ctrl+meta+pagedown",
         "when": "editorTextFocus"
       },
       {
         "command": "code-navigator.gotoPreviousBlockEnd",
-        "key": "ctrl+alt+pageup",
+        "key": "ctrl+win+pageup",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "code-navigator.gotoPreviousBlockEnd",
+        "key": "ctrl+meta+pageup",
         "when": "editorTextFocus"
       }
     ],
