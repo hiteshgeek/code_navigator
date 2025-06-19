@@ -12,30 +12,76 @@ export interface BlockInfo {
 export function getAllBlockEnds(document: vscode.TextDocument): BlockInfo[] {
   const blocks: BlockInfo[] = [];
   const lang = document.languageId;
-  // Robust curly-brace block matcher for JS/TS/PHP
-  const stack: { start: number; header: string }[] = [];
+  // Advanced curly-brace block matcher for JS/TS/PHP with correct if/else/try/catch association
+  const stack: {
+    start: number;
+    header: string;
+    type?: string;
+    parentHeader?: string;
+  }[] = [];
+  const blockHeaderRegex =
+    /^(\s*)(if|else if|else|try|catch|finally|for|while|switch|case|default)\b/i;
   for (let i = 0; i < document.lineCount; i++) {
     const line = document.lineAt(i).text;
-    // Detect block start: '{' (handle multiple on one line)
-    let openIdx = line.indexOf("{");
-    while (openIdx !== -1) {
-      // For else/catch/finally, use this line as header
-      // For all others, use this line as header
-      stack.push({ start: i, header: line.trim() });
-      openIdx = line.indexOf("{", openIdx + 1);
-    }
-    // Detect block end: '}' (handle multiple on one line)
-    let closeIdx = line.indexOf("}");
-    while (closeIdx !== -1) {
-      const block = stack.pop();
-      if (block) {
-        blocks.push({
-          startLine: block.start,
-          endLine: i,
-          headerText: block.header,
-        });
+    // Handle lines with both '}' and '{' (e.g., '} else {')
+    let idx = 0;
+    while (idx < line.length) {
+      if (line[idx] === "}") {
+        const block = stack.pop();
+        if (block) {
+          blocks.push({
+            startLine: block.parentHeader ? block.start : block.start,
+            endLine: i,
+            headerText: block.parentHeader ? block.parentHeader : block.header,
+          });
+        }
+        idx++;
+        continue;
       }
-      closeIdx = line.indexOf("}", closeIdx + 1);
+      if (line[idx] === "{") {
+        // Determine block type for special handling
+        let type = undefined;
+        let headerText = line.trim();
+        let parentHeader = undefined;
+        // If this line is only an opening curly brace, use the previous non-empty line as header
+        if (/^\s*{\s*$/.test(line)) {
+          let prev = i - 1;
+          while (prev >= 0 && document.lineAt(prev).text.trim() === "") {
+            prev--;
+          }
+          if (prev >= 0) {
+            headerText = document.lineAt(prev).text.trim() + " {";
+          }
+        }
+        const match = blockHeaderRegex.exec(line);
+        if (match) {
+          type = match[2].toLowerCase();
+        }
+        if (["else", "else if", "catch", "finally"].includes(type || "")) {
+          // Find the last if/try on the stack
+          for (let j = stack.length - 1; j >= 0; j--) {
+            if (
+              (type === "else" || type === "else if") &&
+              (stack[j].type === "if" || stack[j].type === "else if")
+            ) {
+              parentHeader = stack[j].header;
+              break;
+            } else if (
+              (type === "catch" || type === "finally") &&
+              stack[j].type === "try"
+            ) {
+              parentHeader = stack[j].header;
+              break;
+            }
+          }
+          stack.push({ start: i, header: headerText, type, parentHeader });
+        } else {
+          stack.push({ start: i, header: headerText, type });
+        }
+        idx++;
+        continue;
+      }
+      idx++;
     }
   }
   return blocks;
@@ -53,8 +99,8 @@ export function showEndBlockDecoration(
   lastDecoratedLine = block.endLine;
   activeDecoration = vscode.window.createTextEditorDecorationType({
     after: {
-      contentText: ` //${block.startLine + 1} : ${block.headerText}`,
-      color: "#888888", // Subtle gray color
+      contentText: ` //end of (${block.startLine + 1}) : ${block.headerText}`,
+      color: "#777777", // Subtle gray color
       fontStyle: "italic", // Remove italic for less emphasis
     },
     isWholeLine: false,
