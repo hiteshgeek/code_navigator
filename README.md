@@ -9,7 +9,7 @@ Code Navigator (code-navigator-hiteshgeek) is a Visual Studio Code extension tha
 
 - **See exactly which block you navigated to!** When you jump to the end of any code block, a temporary inline annotation appears at the end line, showing:
 
-  `//end of line_number : content of first line`
+  `//end of (line_number) : content of first line`
 
   This annotation stays visible as long as your cursor is at the end of the block, making it easy to identify the block's start and scope at a glance. Works for all supported languages!
 

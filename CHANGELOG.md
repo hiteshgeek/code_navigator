@@ -8,7 +8,7 @@ All notable changes to the "code-navigator" extension will be documented in this
 
   - When you navigate to the end of any code block, a temporary inline annotation appears at the end line, showing:
 
-    `//<line_number> : <content of first line>`
+    `//end of (<line_number>) : <content of first line>`
 
     (Note: The prefix `end of` has been removed for a cleaner look.)
 
