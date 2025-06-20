@@ -2,7 +2,7 @@
   "name": "code-navigator-hiteshgeek",
   "displayName": "Code Navigator (hiteshgeek)",
   "description": "Navigate to next/previous code block (function, class, trait, interface, etc.) using keyboard shortcuts.",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "engines": {
     "vscode": "^1.101.0"
   },
@@ -32,27 +32,51 @@
       {
         "command": "code-navigator.gotoPreviousBlockEnd",
         "title": "Go to Previous Block End"
+      },
+      {
+        "command": "code-navigator.addBookmarkContextMenu",
+        "title": "Add Block to Bookmarks"
+      },
+      {
+        "command": "code-navigator.removeBookmark",
+        "title": "Remove Bookmark"
+      },
+      {
+        "command": "code-navigator.editBookmarkLabel",
+        "title": "Edit Bookmark Label"
+      },
+      {
+        "command": "code-navigator.removeAllBookmarksInLabel",
+        "title": "Remove All Bookmarks in Label"
+      },
+      {
+        "command": "code-navigator.gotoNextBookmark",
+        "title": "Go to Next Bookmark"
+      },
+      {
+        "command": "code-navigator.gotoPreviousBookmark",
+        "title": "Go to Previous Bookmark"
       }
     ],
     "keybindings": [
       {
         "command": "code-navigator.gotoNextBlockStart",
-        "key": "ctrl+win+down",
+        "key": "ctrl+win+end",
         "when": "editorTextFocus"
       },
       {
         "command": "code-navigator.gotoNextBlockStart",
-        "key": "ctrl+meta+down",
+        "key": "ctrl+meta+end",
         "when": "editorTextFocus"
       },
       {
         "command": "code-navigator.gotoPreviousBlockStart",
-        "key": "ctrl+win+up",
+        "key": "ctrl+win+home",
         "when": "editorTextFocus"
       },
       {
         "command": "code-navigator.gotoPreviousBlockStart",
-        "key": "ctrl+meta+up",
+        "key": "ctrl+meta+home",
         "when": "editorTextFocus"
       },
       {
@@ -73,6 +97,16 @@
       {
         "command": "code-navigator.gotoPreviousBlockEnd",
         "key": "ctrl+meta+pageup",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "code-navigator.gotoNextBookmark",
+        "key": "ctrl+win+insert",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "code-navigator.gotoPreviousBookmark",
+        "key": "ctrl+win+delete",
         "when": "editorTextFocus"
       }
     ],
@@ -136,6 +170,37 @@
           "description": "Enable navigation for docblocks (JSDoc, PHPDoc, etc.). Default is ignored."
         }
       }
+    },
+    "views": {
+      "activitybar": [
+        {
+          "id": "codeNavigatorBookmarks",
+          "name": "Code Navigator Bookmarks"
+        }
+      ]
+    },
+    "menus": {
+      "editor/context": [
+        {
+          "command": "code-navigator.addBookmarkContextMenu",
+          "group": "navigation@10",
+          "when": "editorTextFocus"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "code-navigator.removeBookmark",
+          "when": "view == codeNavigatorBookmarks && viewItem == bookmark"
+        },
+        {
+          "command": "code-navigator.editBookmarkLabel",
+          "when": "view == codeNavigatorBookmarks && viewItem == bookmarkLabel"
+        },
+        {
+          "command": "code-navigator.removeAllBookmarksInLabel",
+          "when": "view == codeNavigatorBookmarks && viewItem == bookmarkLabel"
+        }
+      ]
     }
   },
   "scripts": {
