@@ -5,11 +5,24 @@
 
 Code Navigator (code-navigator-hiteshgeek) is a Visual Studio Code extension that lets you quickly jump to the next or previous code block (function, class, struct, trait, interface, control flow, etc.) in any programming language using keyboard shortcuts.
 
+## 🚩 New Feature : Bookmark Navigation and Management
+
+- **Jump to Next/Previous Bookmark**: Quickly cycle through bookmarks in the current file using keyboard shortcuts:
+  - Next Bookmark: `Ctrl+Win+Insert`
+  - Previous Bookmark: `Ctrl+Win+Delete`
+- **Bookmark Gutter Icons**: Bookmarked lines are now visually marked with a gutter icon in the editor for easy identification.
+- **Duplicate Prevention**: You cannot add the same line to the same bookmark label more than once.
+- **Sorted Bookmark Labels**: Bookmark groups in the Activity Bar are now sorted alphabetically for easier navigation.
+- **Context Menu Delete**: Remove bookmarks directly from the Activity Bar context menu (right-click on a bookmark).
+- **Move or Copy Bookmarks Between Labels**: Easily move or copy any bookmark to a different label from the Activity Bar context menu. Organize your bookmarks flexibly without duplication.
+
+See the [Changelog](./CHANGELOG.md) for details.
+
 ## ✨ Key Feature: End Block Annotation
 
 - **See exactly which block you navigated to!** When you jump to the end of any code block, a temporary inline annotation appears at the end line, showing:
 
-  `//end of line_number : content of first line`
+  `//end of (line_number) : content of first line`
 
   This annotation stays visible as long as your cursor is at the end of the block, making it easy to identify the block's start and scope at a glance. Works for all supported languages!
 
@@ -26,8 +39,8 @@ Code Navigator (code-navigator-hiteshgeek) is a Visual Studio Code extension tha
 
 | Action                     | Shortcut (Windows/Linux) | Shortcut (macOS)  |
 | -------------------------- | ------------------------ | ----------------- |
-| Go to Next Block Start     | Ctrl+Win+Down            | Ctrl+Cmd+Down     |
-| Go to Previous Block Start | Ctrl+Win+Up              | Ctrl+Cmd+Up       |
+| Go to Next Block Start     | Ctrl+Win+End             | Ctrl+Cmd+End      |
+| Go to Previous Block Start | Ctrl+Win+Home            | Ctrl+Cmd+Home     |
 | Go to Next Block End       | Ctrl+Win+PageDown        | Ctrl+Cmd+PageDown |
 | Go to Previous Block End   | Ctrl+Win+PageUp          | Ctrl+Cmd+PageUp   |
 
