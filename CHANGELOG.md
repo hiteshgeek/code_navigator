@@ -12,6 +12,7 @@ All notable changes to the "code-navigator" extension will be documented in this
 - **No Duplicates**: The extension prevents adding the same line to the same label more than once.
 - **Sorted Groups**: Bookmark labels are sorted alphabetically for easy access.
 - **Quick Remove**: Remove bookmarks directly from the context menu in the Activity Bar.
+- **Move or Copy Bookmarks Between Labels**: Move a bookmark to another label or copy it to multiple labels directly from the Activity Bar context menu. Duplicate prevention is enforced.
 
 ## [0.1.0] - 2025-06-20
 

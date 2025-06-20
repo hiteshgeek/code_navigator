@@ -491,6 +491,110 @@ export function activate(context: vscode.ExtensionContext) {
   };
   // Initial call
   updateBookmarkDecorations();
+
+  // --- Move/Copy Bookmark to Another Label ---
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "code-navigator.moveBookmarkToLabel",
+      async (item: any) => {
+        const bookmarks: Bookmark[] = context.globalState.get(
+          "codeNavigatorBookmarks",
+          []
+        );
+        if (!item || !item.bookmark) {
+          vscode.window.showInformationMessage("No bookmark selected.");
+          return;
+        }
+        const labels = Array.from(new Set(bookmarks.map((b) => b.label)));
+        const quickPickItems: vscode.QuickPickItem[] = [
+          ...labels
+            .filter((l) => l !== item.bookmark.label)
+            .map((l) => ({ label: l, description: "Existing label" })),
+          { label: "+ New label...", description: "Create a new label" },
+        ];
+        const picked = await vscode.window.showQuickPick(quickPickItems, {
+          placeHolder: "Select a label to move bookmark to",
+        });
+        if (!picked) return;
+        let newLabel = picked.label;
+        if (newLabel === "+ New label...") {
+          newLabel =
+            (await vscode.window.showInputBox({ prompt: "Enter new label" })) ||
+            "default";
+        }
+        // Remove from old label
+        const idx = bookmarks.findIndex(
+          (b) =>
+            b.filePath === item.bookmark.filePath &&
+            b.line === item.bookmark.line &&
+            b.label === item.bookmark.label
+        );
+        if (idx === -1) return;
+        bookmarks[idx].label = newLabel;
+        await context.globalState.update("codeNavigatorBookmarks", bookmarks);
+        bookmarksProvider.refresh();
+        vscode.window.showInformationMessage(
+          `Bookmark moved to label: ${newLabel}`
+        );
+      }
+    )
+  );
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "code-navigator.copyBookmarkToLabel",
+      async (item: any) => {
+        const bookmarks: Bookmark[] = context.globalState.get(
+          "codeNavigatorBookmarks",
+          []
+        );
+        if (!item || !item.bookmark) {
+          vscode.window.showInformationMessage("No bookmark selected.");
+          return;
+        }
+        const labels = Array.from(new Set(bookmarks.map((b) => b.label)));
+        const quickPickItems: vscode.QuickPickItem[] = [
+          ...labels
+            .filter((l) => l !== item.bookmark.label)
+            .map((l) => ({ label: l, description: "Existing label" })),
+          { label: "+ New label...", description: "Create a new label" },
+        ];
+        const picked = await vscode.window.showQuickPick(quickPickItems, {
+          placeHolder: "Select a label to copy bookmark to",
+        });
+        if (!picked) return;
+        let newLabel = picked.label;
+        if (newLabel === "+ New label...") {
+          newLabel =
+            (await vscode.window.showInputBox({ prompt: "Enter new label" })) ||
+            "default";
+        }
+        // Prevent duplicate
+        const exists = bookmarks.some(
+          (b) =>
+            b.filePath === item.bookmark.filePath &&
+            b.line === item.bookmark.line &&
+            b.label === newLabel
+        );
+        if (exists) {
+          vscode.window.showWarningMessage(
+            `Bookmark already exists in label: ${newLabel}`
+          );
+          return;
+        }
+        bookmarks.push({
+          filePath: item.bookmark.filePath,
+          line: item.bookmark.line,
+          label: newLabel,
+          headerText: item.bookmark.headerText,
+        });
+        await context.globalState.update("codeNavigatorBookmarks", bookmarks);
+        bookmarksProvider.refresh();
+        vscode.window.showInformationMessage(
+          `Bookmark copied to label: ${newLabel}`
+        );
+      }
+    )
+  );
 }
 
 // This method is called when your extension is deactivated

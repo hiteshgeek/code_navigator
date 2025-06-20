@@ -14,6 +14,7 @@ Code Navigator (code-navigator-hiteshgeek) is a Visual Studio Code extension tha
 - **Duplicate Prevention**: You cannot add the same line to the same bookmark label more than once.
 - **Sorted Bookmark Labels**: Bookmark groups in the Activity Bar are now sorted alphabetically for easier navigation.
 - **Context Menu Delete**: Remove bookmarks directly from the Activity Bar context menu (right-click on a bookmark).
+- **Move or Copy Bookmarks Between Labels**: Easily move or copy any bookmark to a different label from the Activity Bar context menu. Organize your bookmarks flexibly without duplication.
 
 See the [Changelog](./CHANGELOG.md) for details.
 

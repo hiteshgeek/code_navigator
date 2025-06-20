@@ -56,6 +56,14 @@
       {
         "command": "code-navigator.gotoPreviousBookmark",
         "title": "Go to Previous Bookmark"
+      },
+      {
+        "command": "code-navigator.moveBookmarkToLabel",
+        "title": "Move Bookmark to Label"
+      },
+      {
+        "command": "code-navigator.copyBookmarkToLabel",
+        "title": "Copy Bookmark to Label"
       }
     ],
     "keybindings": [
@@ -199,6 +207,14 @@
         {
           "command": "code-navigator.removeAllBookmarksInLabel",
           "when": "view == codeNavigatorBookmarks && viewItem == bookmarkLabel"
+        },
+        {
+          "command": "code-navigator.moveBookmarkToLabel",
+          "when": "view == codeNavigatorBookmarks && viewItem == bookmark"
+        },
+        {
+          "command": "code-navigator.copyBookmarkToLabel",
+          "when": "view == codeNavigatorBookmarks && viewItem == bookmark"
         }
       ]
     }
