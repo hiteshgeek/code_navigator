@@ -32,9 +32,32 @@ export class BookmarksProvider
       "codeNavigatorBookmarks",
       []
     );
+
     if (!element) {
-      // Group by label, sorted alphabetically
-      const labels = Array.from(new Set(bookmarks.map((b) => b.label))).sort();
+      // Group by project
+      const projects = Array.from(
+        new Set(bookmarks.map((b) => this.getProjectName(b.filePath)))
+      ).sort();
+      return Promise.resolve(
+        projects.map(
+          (project) =>
+            new BookmarkTreeItem(
+              project,
+              vscode.TreeItemCollapsibleState.Collapsed,
+              undefined,
+              project,
+              undefined // Ensure labelName is undefined for project nodes
+            )
+        )
+      );
+    } else if (element.projectName && !element.bookmark && !element.labelName) {
+      // Show labels for this project
+      const projectBookmarks = bookmarks.filter(
+        (b) => this.getProjectName(b.filePath) === element.projectName
+      );
+      const labels = Array.from(
+        new Set(projectBookmarks.map((b) => b.label))
+      ).sort();
       return Promise.resolve(
         labels.map(
           (label) =>
@@ -42,21 +65,27 @@ export class BookmarksProvider
               label,
               vscode.TreeItemCollapsibleState.Collapsed,
               undefined,
+              element.projectName, // Ensure projectName is undefined for label nodes
               label
             )
         )
       );
-    } else if (element.label && !element.bookmark) {
-      // Show bookmarks for this label
+    } else if (element.labelName && element.projectName && !element.bookmark) {
+      // Show bookmarks for this label in the correct project
+
       const children = bookmarks
-        .filter((b) => b.label === element.label)
+        .filter((b) => {
+          const projectMatch =
+            this.getProjectName(b.filePath) === element.projectName;
+          const labelMatch = b.label === element.labelName;
+          return projectMatch && labelMatch;
+        })
         .map(
           (b) =>
             new BookmarkTreeItem(
               `${this.getFileName(b.filePath)}:${b.line + 1}  ${b.headerText}`,
               vscode.TreeItemCollapsibleState.None,
-              b,
-              element.label
+              b
             )
         );
       return Promise.resolve(children);
@@ -67,6 +96,15 @@ export class BookmarksProvider
   getFileName(filePath: string): string {
     return filePath.split(/[\\\/]/).pop() || filePath;
   }
+
+  getProjectName(filePath: string): string {
+    const workspaceFolders = vscode.workspace.workspaceFolders;
+    if (!workspaceFolders) return "Unknown Project";
+    const folder = workspaceFolders.find((wf) =>
+      filePath.startsWith(wf.uri.fsPath)
+    );
+    return folder ? folder.name : "Unknown Project";
+  }
 }
 
 export class BookmarkTreeItem extends vscode.TreeItem {
@@ -74,7 +112,8 @@ export class BookmarkTreeItem extends vscode.TreeItem {
     public readonly label: string,
     public readonly collapsibleState: vscode.TreeItemCollapsibleState,
     public readonly bookmark?: Bookmark,
-    public readonly groupLabel?: string
+    public readonly projectName?: string,
+    public readonly labelName?: string
   ) {
     super(label, collapsibleState);
     if (bookmark) {
@@ -91,8 +130,11 @@ export class BookmarkTreeItem extends vscode.TreeItem {
       }`;
       this.iconPath = new vscode.ThemeIcon("bookmark");
       this.contextValue = "bookmark";
-    } else {
-      this.iconPath = new vscode.ThemeIcon("list-unordered");
+    } else if (projectName && !labelName) {
+      this.iconPath = new vscode.ThemeIcon("folder"); // Project-level icon
+      this.contextValue = "projectLabel";
+    } else if (labelName) {
+      this.iconPath = new vscode.ThemeIcon("list-unordered"); // Label-level icon
       this.contextValue = "bookmarkLabel";
     }
   }

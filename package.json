@@ -180,10 +180,20 @@
       }
     },
     "views": {
-      "activitybar": [
+      "codeNavigator": [
         {
           "id": "codeNavigatorBookmarks",
-          "name": "Code Navigator Bookmarks"
+          "name": "Bookmarks",
+          "icon": "images/icon.png"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "codeNavigator",
+          "title": "Code Navigator",
+          "icon": "images/activity_bar_icon.svg"
         }
       ]
     },
